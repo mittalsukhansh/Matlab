@@ -130,3 +130,55 @@ x(i)=(a(i, n+1)-sum)/a(i , i) ;
 end
 
 x
+
+
+
+
+gauss seidal
+
+
+% Gauss-Seidel Method
+% Solves Ax = b
+clc; clear;
+
+A = [4 -1 0;
+    -1 4 -1;
+     0 -1 3];      % Coefficient matrix
+b = [15; 10; 10];  % RHS vector
+x0 = [0; 0; 0];    % Initial guess
+
+tol = 1e-6;        % Tolerance
+maxIter = 100;     % Maximum iterations
+
+n = length(b);
+x = x0;
+
+for k = 1:maxIter
+    x_old = x;
+    
+    for i = 1:n
+        % sum1 = a(i,1:i-1)*x(1:i-1)
+        sum1 = 0;
+        for j = 1:i-1
+            sum1 = sum1 + A(i,j)*x(j);
+        end
+        
+        % sum2 = a(i,i+1:n)*x_old(i+1:n)
+        sum2 = 0;
+        for j = i+1:n
+            sum2 = sum2 + A(i,j)*x_old(j);
+        end
+        
+        x(i) = (b(i) - sum1 - sum2)/A(i,i);
+    end
+    
+    % Check convergence
+    if norm(x - x_old, inf) < tol
+        fprintf('Converged in %d iterations\n', k);
+        break;
+    end
+end
+
+disp('Solution vector x = ');
+disp(x);
+
